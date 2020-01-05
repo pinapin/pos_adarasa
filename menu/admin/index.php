@@ -44,6 +44,7 @@ $proses = (isset($_GET['p'])) ? $_GET['p'] : "";
     <script src="global_assets/js/plugins/forms/styling/uniform.min.js"></script>
     <script src="global_assets/js/plugins/forms/selects/bootstrap_multiselect.js"></script>
     <script src="global_assets/js/plugins/forms/styling/switchery.min.js"></script>
+    <script type="text/javascript" src="assets/js/money.min.js"></script>
 
     <script src="assets/js/app.js"></script>
     <!-- <script src="global_assets/js/demo_pages/dashboard.js"></script> -->

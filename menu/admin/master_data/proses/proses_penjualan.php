@@ -4,6 +4,7 @@ $tambah = isset($_POST['tambah']);
 $simpan = isset($_POST['simpan']);
 $edit = isset($_POST['edit']);
 $hapus = isset($_POST['hapus']);
+$update_jumlah = isset($_POST['update_jumlah']);
 if ($tambah == "tambah") {
 
     $kd_barang =  trim($_POST['kd_barang']);
@@ -65,6 +66,25 @@ if ($tambah == "tambah") {
         $status = array('status' => '1', 'pesan' => 'DATA BERHASIL DIHAPUS');
     } else {
         $status = array('status' => '2', 'pesan' => 'DATA GAGAL DIHAPUS');
+    }
+} else if ($update_jumlah == "update_jumlah") {
+    $kd_barang = $_POST['kd_barang'];
+    $jumlah = $_POST['jumlah'];
+
+    //cek stok dulu bro
+    $query2 = $mysqli->query("SELECT SUM(IF(tipe='in',jml,0)) AS masuk,SUM(IF(tipe='out',jml,0)) AS keluar FROM tb_stok a JOIN tb_barang b ON a.id_barang=b.id WHERE b.kd_barang='$kd_barang'");
+    $data2 = $query2->fetch_array();
+    $stok = $data2['masuk'] - $data2['keluar'];
+
+    if ($stok < $jumlah) {
+        $status = array('status' => '2', 'pesan' => 'JUMLAH MELEBIHI STOK');
+    } else {
+        $update = $mysqli->query("UPDATE tb_tmp_penjualan set jml='$jumlah' WHERE kd_barang='$kd_barang'");
+        if ($update) {
+            $status = array('status' => '1', 'pesan' => 'DATA BERHASIL DIUBAH');
+        } else {
+            $status = array('status' => '2', 'pesan' => 'GAGAL');
+        }
     }
 }
 echo json_encode($status);
