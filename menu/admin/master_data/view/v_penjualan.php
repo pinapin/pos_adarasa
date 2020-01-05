@@ -1,3 +1,32 @@
+<?php
+function oto($tabel, $id)
+{
+    include "../../../../functions/config/koneksi.php";
+    $panjang = 3;
+    $tgl = date('Ymd');
+    $query = "SELECT max($id) as maxKode FROM $tabel WHERE id_penjualan LIKE '$tgl%'";
+    $hasil = mysqli_query($mysqli, $query);
+    $data = mysqli_fetch_array($hasil);
+    $kodeBarang = $data['maxKode'];
+    if ($kodeBarang == "") {
+        $angka = 0;
+    } else {
+        $angka = substr($kodeBarang, -3, 3);
+    }
+    $angka++;
+    $angka  = strval($angka);
+    $tmp    = "";
+    for ($i = 1; $i <= ($panjang - strlen($angka)); $i++) {
+        $tmp = $tmp . "0";
+    }
+
+
+    return $tmp . $angka;
+}
+$tgl = date('Ymd');
+$id_pen = $tgl . oto('tb_penjualan', 'id_penjualan');
+?>
+
 <table class="table datatable-basic table-hover">
     <thead>
         <tr style="text-transform: uppercase">
@@ -70,21 +99,24 @@
 
         <?php endforeach; ?>
         <form id="saved">
-            <tr class="text-right">
-                <th colspan="6">BAYAR :</th>
-                <td>
-                    <input type="hidden" value="<?= $data2['total']; ?>" name="total" id="total" class="form-control text-right">
-                    <input style="font-size: 20px" type="text" onkeyup="sum3()" name="bayar" id="bayar" class="form-control text-right bypaket">
-                </td>
-            </tr>
-            <tr class="text-right">
-                <th colspan="6">KEMBALI :</th>
-                <td><input readonly style="font-size: 20px" type="text" name="kembali" id="kembali" class="form-control text-right"></td>
-            </tr>
-            <tr class="text-right">
-                <th colspan="6"></th>
-                <td><button class="btn btn-primary w-100">SIMPAN <i class="icon-paperplane ml-2"></i></button> </td>
-            </tr>
+            <div class="row">
+                <tr class="text-right">
+                    <th colspan="6">BAYAR :</th>
+                    <td>
+                        <input type="hidden" name="id_penjualan" value="<?= $id_pen; ?>">
+                        <input type="hidden" value="<?= $data2['total']; ?>" name="total" id="total" class="form-control text-right">
+                        <input style="font-size: 20px" type="text" onkeyup="sum3()" name="bayar" id="bayar" class="form-control text-right bypaket">
+                    </td>
+                </tr>
+                <tr class="text-right">
+                    <th colspan="6">KEMBALI :</th>
+                    <td><input readonly style="font-size: 20px" type="text" name="kembali" id="kembali" class="form-control text-right"></td>
+                </tr>
+                <tr class="text-right">
+                    <th colspan="6"></th>
+                    <td><button class="btn btn-primary w-100">SIMPAN <i class="icon-paperplane ml-2"></i></button> </td>
+                </tr>
+            </div>
         </form>
     </tbody>
 </table>
@@ -136,6 +168,7 @@
         }
     }
 </script>
+
 <script>
     //proses simpan
     $('#saved').submit(function(e) { //nek di klik id form urusan
@@ -165,7 +198,6 @@
         });
     });
 </script>
-
 
 
 <script>

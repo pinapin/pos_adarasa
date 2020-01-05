@@ -35,16 +35,15 @@ if ($tambah == "tambah") {
     }
 } else if ($simpan == "simpan") {
 
-    $kategori =  trim($_POST['kategori']);
+    $id_penjualan =  trim($_POST['id_penjualan']);
+    $tgl = date('Ymd');
+    $jam = date('His');
+    $bayar = $_POST['bayar'];
 
-    $cek = $mysqli->query("SELECT kategori FROM tb_kategori where kategori='$kategori'");
-    if ((mysqli_num_rows($cek) > 0)) {
-        $status = array('status' => '0', 'pesan' => 'DATA SUDAH ADA');
-    } else {
-        $simpan = $mysqli->query("INSERT INTO `tb_kategori` (kategori) VALUES ('$kategori')");
 
-        $status = array('status' => '1', 'pesan' => 'DATA BERHASIL DISIMPAN');
-    }
+    $simpan = $mysqli->query("INSERT INTO `tb_penjualan` (id_penjualan,tgl,jam,bayar) VALUES ('$id_penjualan','$tgl','$jam','$bayar')");
+
+    $status = array('status' => '1', 'pesan' => 'DATA BERHASIL DISIMPAN');
 } else if ($edit == "edit") {
     $id_kategori =  trim($_POST['id_kategori']);
     $kategori =  trim($_POST['kategori']);

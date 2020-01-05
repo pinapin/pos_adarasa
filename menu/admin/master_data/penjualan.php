@@ -34,6 +34,9 @@
     $('#tampil-total').load('menu/admin/master_data/view/v_total.php');
 </script>
 
+
+
+
 <script>
     //proses simpan
     $('#input').submit(function(e) { //nek di klik id form urusan
